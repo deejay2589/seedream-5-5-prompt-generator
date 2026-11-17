@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://deejay2589.github.io/seedream-5-5-prompt-generator/sitemap.xml
