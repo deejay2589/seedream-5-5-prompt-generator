@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seedream 5.5 Prompt Generator — Build Better Seedream Prompts</title>
+<meta name="description" content="Free Seedream 5.5 Prompt Generator: build copy-ready prompts for ByteDance's Seedream 5.5 image model with scene presets, exact quoted text, transparent background and reference-image controls. No sign-up.">
+<meta property="og:title" content="Seedream 5.5 Prompt Generator — Build Better Seedream Prompts">
+<meta property="og:description" content="A free form-based prompt builder for Seedream 5.5: product photos, posters, logos and transparent stickers, with exact-text and multi-reference controls.">
+<meta property="og:type" content="website">
+<style>
+  :root{
+    --bg:#140d1c; --panel:#201530; --panel2:#190f27; --line:#3b2a55;
+    --text:#f1eaf9; --muted:#b3a3cc; --accent:#c084fc; --accent2:#fb923c;
+    --err:#ff7a7a; --radius:14px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.55}
+  .wrap{max-width:880px;margin:0 auto;padding:28px 18px 60px}
+  header{text-align:center;padding:26px 0 8px}
+  h1{font-size:2.1rem;margin:0 0 10px;letter-spacing:-.02em}
+  h1 .grad{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sub{color:var(--muted);max-width:640px;margin:0 auto;font-size:1.02rem}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:22px;margin-top:26px}
+  label{display:block;font-size:.88rem;color:var(--muted);margin:14px 0 5px}
+  label:first-of-type{margin-top:0}
+  input[type=text],select{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:10px;color:var(--text);padding:11px 12px;font-size:.97rem;font-family:inherit}
+  input:focus,select:focus{outline:2px solid var(--accent);outline-offset:0;border-color:transparent}
+  .hint{font-size:.8rem;color:var(--muted);margin-top:4px}
+  .row{display:flex;gap:14px;flex-wrap:wrap}
+  .row > div{flex:1;min-width:200px}
+  .toggle{display:flex;align-items:center;gap:10px;margin-top:16px;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 14px}
+  .toggle input{width:20px;height:20px;accent-color:var(--accent2)}
+  .toggle span{font-size:.95rem;color:var(--text)}
+  .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+  button.btn{padding:12px 20px;border-radius:10px;border:none;font-size:1rem;cursor:pointer;font-weight:600}
+  .primary{background:var(--accent2);color:#2a1503}
+  .secondary{background:var(--panel2);color:var(--text);border:1px solid var(--line)}
+  button.btn:active{transform:translateY(1px)}
+  .output{margin-top:22px}
+  .output pre{background:#0d0716;border:1px solid var(--line);border-radius:10px;padding:16px;overflow:auto;font-size:.95rem;line-height:1.55;white-space:pre-wrap;word-break:break-word;min-height:60px}
+  .ok{color:var(--accent2);font-size:.88rem;margin-left:6px;display:none}
+  h2{font-size:1.35rem;margin:38px 0 10px;letter-spacing:-.01em}
+  p,li{color:#e2d7f2}
+  .muted{color:var(--muted)}
+  ul{padding-left:20px}
+  .steps{list-style:none;padding-left:0}
+  .steps li{margin:8px 0}
+  details{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:13px 16px;margin-top:10px}
+  summary{cursor:pointer;font-weight:600}
+  details p{margin:8px 0 2px}
+  footer{margin-top:44px;text-align:center;color:var(--muted);font-size:.85rem}
+  footer a{color:var(--accent)}
+  code{background:#0d0716;border:1px solid var(--line);border-radius:5px;padding:1px 6px;font-size:.88em}
+  @media (max-width:560px){h1{font-size:1.6rem}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Seedream 5.5 <span class="grad">Prompt Generator</span></h1>
+    <p class="sub">Build a copy-ready prompt for ByteDance's <strong>Seedream 5.5</strong> image model — with the fields generic prompt boxes don't give you: exact quoted text, transparent backgrounds and multi-reference editing briefs. Free, no sign-up, runs in your browser.</p>
+  </header>
+
+  <section class="card" aria-label="Prompt builder">
+    <label for="scene">Scene — what are you making?</label>
+    <select id="scene">
+      <option value="product">🛍️ Product photo</option>
+      <option value="poster">🎨 Poster / key visual</option>
+      <option value="logo">🔷 Logo</option>
+      <option value="sticker">🏷️ Transparent sticker</option>
+    </select>
+
+    <label for="subject">Subject — the main thing in the image</label>
+    <input type="text" id="subject" placeholder="e.g. a matte black insulated water bottle with a bamboo lid" autocomplete="off">
+
+    <div class="row">
+      <div>
+        <label for="composition">Composition</label>
+        <select id="composition">
+          <option value="centered, eye-level shot with generous negative space">Centered, eye-level, negative space</option>
+          <option value="close-up macro shot with shallow depth of field">Close-up macro</option>
+          <option value="flat lay, top-down view">Flat lay (top-down)</option>
+          <option value="three-quarter angle view">Three-quarter angle</option>
+          <option value="wide shot showing the full scene">Wide shot</option>
+          <option value="dynamic diagonal composition, slight low angle">Dynamic diagonal, low angle</option>
+        </select>
+      </div>
+      <div>
+        <label for="lighting">Lighting &amp; mood</label>
+        <select id="lighting">
+          <option value="soft studio lighting, clean and commercial">Soft studio lighting</option>
+          <option value="bright natural daylight">Natural daylight</option>
+          <option value="warm golden-hour light">Golden hour</option>
+          <option value="dramatic neon lighting, cyberpunk mood">Neon / cyberpunk</option>
+          <option value="soft diffused light, minimalist and airy">Soft diffused, minimalist</option>
+          <option value="moody low-key lighting with strong contrast">Moody low-key</option>
+        </select>
+      </div>
+    </div>
+
+    <label for="exacttext">Exact text to render <span class="muted">(optional — Seedream 5.5 prints text inside quotes word-for-word)</span></label>
+    <input type="text" id="exacttext" placeholder='e.g. SUMMER SALE -50%' autocomplete="off">
+    <div class="hint">Leave empty if the image needs no text. Whatever you type is wrapped in quotation marks in the prompt, which is how 5.5 knows to render it exactly.</div>
+
+    <div class="toggle">
+      <input type="checkbox" id="transparent">
+      <span>Transparent background (PNG with alpha — best for stickers, logos and overlays)</span>
+    </div>
+
+    <label for="refs">Reference images you will upload <span class="muted">(0–10 — 5.5 keeps the subject consistent across references)</span></label>
+    <select id="refs">
+      <option value="0">None — text only</option>
+      <option value="1">1 reference image</option>
+      <option value="2">2 reference images</option>
+      <option value="3">3 reference images</option>
+      <option value="4">4 reference images</option>
+      <option value="5">5 reference images</option>
+      <option value="6">6 reference images</option>
+      <option value="7">7 reference images</option>
+      <option value="8">8 reference images</option>
+      <option value="9">9 reference images</option>
+      <option value="10">10 reference images (max)</option>
+    </select>
+
+    <div class="output">
+      <label>Your Seedream 5.5 prompt</label>
+      <pre id="preview"></pre>
+      <div class="actions">
+        <button class="btn primary" onclick="copyText()">📋 Copy prompt</button>
+        <span class="ok" id="copyOk">Copied ✓</span>
+      </div>
+    </div>
+  </section>
+
+  <h2>What is Seedream 5.5?</h2>
+  <p><strong>Seedream 5.5</strong> is ByteDance's image generation model, released on <strong>November 9, 2026</strong> and rolled out the same week to Dreamina, CapCut, BytePlus and Doubao. It generates up to <strong>2K resolution</strong> images and is built for design work rather than just pretty pictures:</p>
+  <ul>
+    <li><strong>Exact text rendering</strong> — put words in quotation marks and 5.5 prints them letter-for-letter, which makes posters, packaging and ads practical.</li>
+    <li><strong>Transparent PNG output</strong> — ask for a transparent background and you get clean cut-outs for stickers, logos and overlays.</li>
+    <li><strong>Up to 10 reference images</strong> — feed it product shots or a character from several angles and it keeps the subject consistent.</li>
+    <li><strong>Iterative editing</strong> — the same image can be refined over many rounds of edits without the subject drifting.</li>
+  </ul>
+  <p class="muted">This page does not generate images. It builds a well-structured prompt; paste the result into Dreamina, CapCut, BytePlus or any other app that offers Seedream 5.5.</p>
+
+  <h2>How to use this generator</h2>
+  <ol class="steps">
+    <li><strong>1. Pick a scene</strong> — product photo, poster, logo or transparent sticker. The scene sets the base phrasing of the prompt.</li>
+    <li><strong>2. Describe the subject</strong> — be concrete about materials, colors and details; 5.5 follows specific descriptions closely.</li>
+    <li><strong>3. Add the 5.5-only fields</strong> — exact text (auto-quoted), transparent background, and how many reference images you'll upload.</li>
+    <li><strong>4. Copy and paste</strong> — drop the prompt into your Seedream 5.5 app, upload the references if you set any, and generate.</li>
+    <li><strong>5. Edit, don't restart</strong> — ask for changes in plain words ("make the background darker", "move the text up"); 5.5 keeps the rest of the image stable across edits.</li>
+  </ol>
+
+  <h2>Seedream 5.5 prompt-writing tips</h2>
+  <ul>
+    <li><strong>Quote your text.</strong> Text inside <code>"double quotes"</code> is rendered verbatim. Unquoted text is treated as a description and often comes out misspelled.</li>
+    <li><strong>One subject, one scene.</strong> A prompt built around a single clear subject beats a collage of ideas — generate variants separately and composite later.</li>
+    <li><strong>Use references for consistency.</strong> For a product line or a recurring character, upload reference images and say what must stay identical (shape, color, logo placement).</li>
+    <li><strong>Say "transparent background" out loud.</strong> For stickers and logos, explicitly ask for a transparent PNG background — don't rely on "no background" phrasing alone.</li>
+    <li><strong>Iterate in small steps.</strong> 5.5 is designed for long editing chains: change one thing per round and the image stays coherent far longer than with regenerate-from-scratch workflows.</li>
+    <li><strong>State the format.</strong> Mention aspect and use ("a vertical poster", "a square product shot") in the prompt when the app doesn't expose size controls.</li>
+  </ul>
+
+  <h2>FAQ</h2>
+  <details>
+    <summary>Is this prompt generator free?</summary>
+    <p>Yes. It runs entirely in your browser, needs no account, and nothing you type is sent anywhere or stored. Generating the actual image happens in your Seedream 5.5 app (Dreamina, CapCut, BytePlus, Doubao), which may have its own pricing.</p>
+  </details>
+  <details>
+    <summary>How do I get Seedream 5.5 to spell text correctly?</summary>
+    <p>Put the exact words in quotation marks in the prompt — for example, a poster with the text "SUMMER SALE". Seedream 5.5 treats quoted text as literal content to print, not as a topic to illustrate. Keep quoted text short; long paragraphs still trip up every image model.</p>
+  </details>
+  <details>
+    <summary>Where can I use Seedream 5.5?</summary>
+    <p>Seedream 5.5 launched inside ByteDance's own products — Dreamina, CapCut, BytePlus and Doubao — and a growing list of third-party platforms that resell access. Build your prompt here, then paste it into whichever of those you use.</p>
+  </details>
+  <details>
+    <summary>What are reference images for?</summary>
+    <p>References pin down what text alone can't: a specific product, person or style. Seedream 5.5 accepts up to 10 reference images and keeps the subject consistent with them, which is what makes product series and character work practical. If you set a reference count above, the generated prompt includes an editing brief telling the model to match them.</p>
+  </details>
+
+  <footer>
+    Free tool · Runs entirely in your browser · No data collected<br>
+    More free tools: <a href="https://deejay2589.github.io/gemini-skill-generator/">Gemini Skill Generator</a><br>
+    Not affiliated with ByteDance. Seedream, Dreamina, CapCut and Doubao are trademarks of their respective owners.
+  </footer>
+</div>
+
+<script>
+var sceneLead = {
+  product: 'Professional product photo of ',
+  poster:  'Eye-catching poster design featuring ',
+  logo:    'Clean vector-style logo design of ',
+  sticker: 'Die-cut sticker illustration of '
+};
+var sceneTail = {
+  product: 'ultra-detailed, sharp focus, 2K quality, commercial photography look',
+  poster:  'bold layout, high visual impact, print-ready, 2K quality',
+  logo:    'flat design, minimal, scalable, crisp edges, 2K quality',
+  sticker: 'thick white border, vibrant colors, cute and clean style, 2K quality'
+};
+
+function build(){
+  var scene = document.getElementById('scene').value;
+  var subject = document.getElementById('subject').value.trim() || 'a reusable glass coffee cup with a cork sleeve';
+  var comp = document.getElementById('composition').value;
+  var light = document.getElementById('lighting').value;
+  var text = document.getElementById('exacttext').value.trim();
+  var transparent = document.getElementById('transparent').checked || scene === 'sticker';
+  var refs = parseInt(document.getElementById('refs').value, 10);
+
+  var parts = [];
+  parts.push(sceneLead[scene] + subject);
+  parts.push(comp);
+  parts.push(light);
+  if(text){
+    parts.push('with the exact text "' + text.replace(/"/g,'') + '" rendered clearly and spelled correctly');
+  }
+  if(transparent){
+    parts.push('on a fully transparent background, PNG with alpha channel, no backdrop, no shadow on the background');
+  }
+  if(refs > 0){
+    parts.push('use the ' + refs + ' uploaded reference image' + (refs>1?'s':'') + ' as the source of truth — keep the subject\'s shape, colors and details identical to the reference' + (refs>1?'s':''));
+  }
+  parts.push(sceneTail[scene]);
+  return parts.join(', ') + '.';
+}
+
+function render(){
+  document.getElementById('preview').textContent = build();
+}
+
+function copyText(){
+  var t = build();
+  function done(){ var ok=document.getElementById('copyOk'); ok.style.display='inline'; setTimeout(function(){ ok.style.display='none'; }, 2000); }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(t).then(done, function(){ fallback(); });
+  } else { fallback(); }
+  function fallback(){
+    var ta=document.createElement('textarea'); ta.value=t; document.body.appendChild(ta);
+    ta.select(); try{ document.execCommand('copy'); done(); }catch(e){} ta.remove();
+  }
+}
+
+['scene','subject','composition','lighting','exacttext','transparent','refs'].forEach(function(id){
+  var el = document.getElementById(id);
+  el.addEventListener('input', render);
+  el.addEventListener('change', render);
+});
+render();
+</script>
+</body>
+</html>
